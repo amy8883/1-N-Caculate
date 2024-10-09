@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 페이지</title>
+    <style>
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            background-color: #F7F7F7; /* 배경색 */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 100px auto; /* 중앙 정렬 */
+            padding: 20px;
+            background-color: white; /* 카드 배경색 */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #4A4A4A; /* 제목 색상 */
+        }
+        h3 {
+            text-align: center;
+            color: #7D7D7D; /* 서브 제목 색상 */
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #4A4A4A; /* 라벨 색상 */
+        }
+        input[type="text"], input[type="password"] {
+            width: 95%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #D9D9D9; /* 테두리 색상 */
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #FFD600; /* 포커스 시 테두리 색상 */
+            outline: none; /* 아웃라인 제거 */
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #FFD600; /* 버튼 배경색 */
+            color: white; /* 버튼 글씨 색상 */
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #FFC107; /* 버튼 호버 색상 */
+        }
+        p {
+            text-align: center;
+            color: #4A4A4A; /* 텍스트 색상 */
+        }
+        a {
+            color: #FFD600; /* 링크 색상 */
+            text-decoration: none; /* 밑줄 제거 */
+        }
+        #message {
+            color: red; /* 경고 메시지 색상 */
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>1/N 정산 시스템에 오신 것을 환영합니다!</h2>
+    <h3>회원가입</h3>
+    <label for="username">사용자 이름:</label>
+    <input type="text" id="username" placeholder="사용자 이름 입력" required>
+    <div id="message"></div> <!-- 경고 메시지 표시 영역 -->
+
+    <label for="password">비밀번호:</label>
+    <input type="password" id="password" placeholder="비밀번호 입력" required>
+
+    <button onclick="signup()">회원가입</button>
+    
+    <p>이미 계정이 있나요? <a href="login.html">로그인하기</a></p>
+</div>
+
+<script>
+    function signup() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const messageDiv = document.getElementById('message');
+
+        // 이전 경고 메시지 초기화
+        messageDiv.innerText = '';
+
+        // 사용자 이름 중복 체크
+        if (localStorage.getItem(username)) {
+            messageDiv.innerText = '이미 존재하는 사용자 이름입니다.';
+            return;
+        }
+
+        // 사용자 이름과 비밀번호 저장
+        localStorage.setItem(username, password);
+        alert('회원가입이 완료되었습니다!');
+        window.location.href = 'login.html'; // 로그인 페이지로 이동
+    }
+</script>
+
+</body>
+</html>

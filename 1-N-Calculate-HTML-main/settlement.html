@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1/N 정산 시스템</title>
+    <style>
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            background-color: #F7F7F7; /* 배경색 */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 100px auto; /* 중앙 정렬 */
+            padding: 20px;
+            background-color: white; /* 카드 배경색 */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #4A4A4A; /* 제목 색상 */
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #4A4A4A; /* 라벨 색상 */
+        }
+        input[type="number"] {
+            width: 95%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #D9D9D9; /* 테두리 색상 */
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="number"]:focus {
+            border-color: #FFD600; /* 포커스 시 테두리 색상 */
+            outline: none; /* 아웃라인 제거 */
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #FFD600; /* 버튼 배경색 */
+            color: white; /* 버튼 글씨 색상 */
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #FFC107; /* 버튼 호버 색상 */
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center; /* 결과 중앙 정렬 */
+            color: #4A4A4A; /* 결과 텍스트 색상 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>1/N 정산 시스템</h2>
+    <label for="totalAmount">총 금액:</label>
+    <input type="number" id="totalAmount" placeholder="총 금액 입력" required>
+
+    <label for="participants">참여자 수:</label>
+    <input type="number" id="participants" placeholder="참여자 수 입력" required>
+
+    <button onclick="calculateShare()">정산하기</button>
+    <button onclick="resetFields()">초기화</button>
+    <button onclick="saveHistory()">저장하기</button>
+    <button onclick="viewHistory()">저장된 내역 보기</button>
+    <button onclick="logout()">로그아웃</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function calculateShare() {
+        const totalAmount = parseFloat(document.getElementById('totalAmount').value);
+        const numberOfParticipants = parseInt(document.getElementById('participants').value);
+
+        if (isNaN(totalAmount) || isNaN(numberOfParticipants) || numberOfParticipants <= 0) {
+            document.getElementById('result').innerText = '유효한 값을 입력하세요.';
+            return;
+        }
+
+        const share = Math.floor(totalAmount / numberOfParticipants);
+        document.getElementById('result').innerText = `각 참여자는 ${share}원을 부담해야 합니다.`;
+    }
+
+    function resetFields() {
+        document.getElementById('totalAmount').value = '';
+        document.getElementById('participants').value = '';
+        document.getElementById('result').innerText = '';
+    }
+
+    function saveHistory() {
+        const totalAmount = document.getElementById('totalAmount').value;
+        const numberOfParticipants = document.getElementById('participants').value;
+        const currentUser = localStorage.getItem('currentUser');
+
+        if (!totalAmount || !numberOfParticipants) {
+            alert('정산 내역을 저장할 수 없습니다. 모든 필드를 입력하세요.');
+            return;
+        }
+
+        const history = {
+            totalAmount: totalAmount,
+            numberOfParticipants: numberOfParticipants,
+            share: Math.floor(totalAmount / numberOfParticipants)
+        };
+
+        // 사용자별로 저장
+        let histories = JSON.parse(localStorage.getItem(currentUser + 'Histories')) || [];
+        histories.push(history);
+        localStorage.setItem(currentUser + 'Histories', JSON.stringify(histories));
+
+        alert('정산 내역이 저장되었습니다!');
+    }
+
+    function viewHistory() {
+        window.location.href = 'history.html'; // 정산 내역 조회 페이지로 이동
+    }
+
+    function logout() {
+        alert('로그아웃 되었습니다.');
+        localStorage.removeItem('currentUser'); // 현재 사용자 정보 제거
+        window.location.href = 'login.html'; // 로그인 페이지로 이동
+    }
+</script>
+
+</body>
+</html>
